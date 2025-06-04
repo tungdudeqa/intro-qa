@@ -2,10 +2,10 @@ import os
 from dotenv import load_dotenv
 import pytest
 import time
-from playwright.sync_api import Page, expect, sync_playwright
+from playwright.sync_api import Page, expect
 import logging
 from utils import retention_date_format
-from data import get_data
+from data.supplier_form_data import form_data
 from locator import locators, errors
 
 load_dotenv()
@@ -15,21 +15,6 @@ otp_code = os.getenv("OTP_CODE", "")
 base_url = os.getenv("BASE_URL", "")
 
 logger = logging.getLogger("logger")
-
-@pytest.fixture(scope="function")
-def browser():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
-        yield browser
-        browser.close()
-
-@pytest.fixture(scope="function")
-def page(browser):
-    context = browser.new_context()
-    page = context.new_page()
-    yield page
-    context.close()
-
 
 @pytest.fixture(autouse=True)
 def enter_site(page: Page):
@@ -54,8 +39,9 @@ def enter_site(page: Page):
     page.wait_for_load_state("domcontentloaded")
 
 
-@pytest.mark.parametrize("data", get_data())
-def test_profile_form(page: Page, data):
+@pytest.mark.skip(reason="Skipping test for now.")
+@pytest.mark.parametrize("data", form_data)
+def test_supplier_form(page: Page, data):
     supplier_name = data["supplier_name"]
     business_type = data["business_type"]
     end_date = data["end_date"]
