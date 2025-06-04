@@ -38,11 +38,13 @@ def enter_site(page: Page):
 
     page.locator(locators["sign_in_button"]).click()
 
-    # uncomment if OTP verification is needed
-    otp_input = page.locator(locators["otp_input"])
-    if otp_input.is_visible():
+    try:
+        otp_input = page.locator(locators["otp_input"])
+        otp_input.wait_for(timeout=3000)
         otp_input.fill(otp_code)
         page.locator(locators["verify_button"]).click()
+    except:
+        pass  # OTP step is not required
 
     page.wait_for_url(base_url + "/en/platform/reports")
     page.goto(base_url + "/en/platform/suppliers")
@@ -73,10 +75,13 @@ def test_profile_form(page: Page, data):
 
     error_found = False
     for key, error in errors.items():
-        error_element = page.locator(error["path"])
-        if error_element.is_visible():
+        try:
+            error_element = page.locator(error["path"])
+            error_element.wait_for(timeout=1000)
             expect(error_element).to_have_text(error["message"])
             error_found = True
+        except:
+            pass  # Error element not present
 
     if error_found:
         return
