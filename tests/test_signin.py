@@ -20,6 +20,7 @@ def test_dcp_004(page: Page, password):
     signin_page = SigninPage(page)
     signin_page.signin_invalid(email="correct", password=password)
 
+@pytest.mark.skip(reason="done in test_dcp_005")
 @pytest.mark.parametrize("value", dcp_signin_data.values(), ids=dcp_signin_data.keys())
 def test_dcp_005(page: Page, value):
     signin_page = SigninPage(page)
