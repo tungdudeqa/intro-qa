@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import pytest
 import time
 from playwright.sync_api import Page, expect, sync_playwright
+import logging
 from utils import retention_date_format
 from data import get_data
 from locator import locators, errors
@@ -13,13 +14,14 @@ retailer_password = os.getenv("RETAILER_PASSWORD", "")
 otp_code = os.getenv("OTP_CODE", "")
 base_url = os.getenv("BASE_URL", "")
 
+logger = logging.getLogger("logger")
+
 @pytest.fixture(scope="function")
 def browser():
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
         yield browser
         browser.close()
-
 
 @pytest.fixture(scope="function")
 def page(browser):
@@ -43,8 +45,9 @@ def enter_site(page: Page):
         otp_input.wait_for(timeout=3000)
         otp_input.fill(otp_code)
         page.locator(locators["verify_button"]).click()
+        logger.info("OTP code entered successfully.")
     except:
-        pass  # OTP step is not required
+        logger.info("No OTP input found, proceeding without entering OTP.")
 
     page.wait_for_url(base_url + "/en/platform/reports")
     page.goto(base_url + "/en/platform/suppliers")
@@ -80,8 +83,9 @@ def test_profile_form(page: Page, data):
             error_element.wait_for(timeout=1000)
             expect(error_element).to_have_text(error["message"])
             error_found = True
+            logger.info(f"{key} - {error['message']}")
         except:
-            pass  # Error element not present
+            logger.info(f"{key} not present")
 
     if error_found:
         return
