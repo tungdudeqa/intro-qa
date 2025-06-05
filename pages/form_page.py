@@ -2,6 +2,7 @@ from pages.signin_page import SigninPage
 from playwright.sync_api import expect
 from utils import retention_date_format
 from datetime import datetime as dt
+from utils import month_abbr_to_num
 import time
 
 
@@ -25,7 +26,8 @@ class FormPage(SigninPage):
                 "calendar_month_btn": '//button[@class="ant-picker-month-btn"]',
                 "calendar_month_option": '//td[contains(@class, "ant-picker-cell-in-view") and .//div[text()="{short_month}"]]',
                 "calendar_year_btn": '//button[@class="ant-picker-year-btn"]',
-                "calendar_year_option": '//div[@class="ant-picker-cell-inner" and text()="{year}"]',
+                "calendar_year_option": '//td[contains(@class, "ant-picker-cell-in-view") and .//div[text()="{year}"]]',
+                "contract_date_details": '//body/div/div/div[2]/div/div[2]/div[1]/div/div[3]/div[1]/div[1]/h5',
             }
         )
         self.errors = {
@@ -117,3 +119,44 @@ class FormPage(SigninPage):
 
         if not error_found:
             raise AssertionError("No errors found when expected.")
+    
+    def validate_end_date(self, end_date):
+        self._goto()
+        self.goto("/en/platform/information")
+
+        contract_end_date = self.elem("contract_date_details").text_content().split("-")[1].strip()
+        contract_end_dt = dt.strptime(contract_end_date, "%d %b %Y")
+        end_date_dt = dt.strptime(end_date, "%Y-%m-%d")
+        today = dt.today()
+        curr_year, curr_month = today.strftime("%Y %b").split()
+
+        self.goto("/en/platform/suppliers")
+        self._select_supplier(edit=True)
+
+        self.elem("date_picker_range").nth(1).click()
+
+        year, short_month = dt.strptime(end_date, "%Y-%m-%d").strftime("%Y %b").split()
+
+        #pick year
+        self.elem("calendar_year_btn").nth(1).click()
+        year_option = self.elem("calendar_year_option", year=year)
+        if int(year) < int(curr_year):
+            self.logger.info(f"Year {year} is less than current year {curr_year}. Expect disabled year option.")
+            expect(year_option).to_contain_class("ant-picker-cell-disabled")
+            return
+        year_option.click()
+
+        # pick month
+        month_option = self.elem("calendar_month_option", short_month=short_month)
+        if int(year) == int(curr_year) and month_abbr_to_num(short_month) < month_abbr_to_num(curr_month):
+            self.logger.info(f"Month {short_month} is less than current month {curr_month} in the same year. Expect disabled month option.")
+            expect(month_option).to_contain_class("ant-picker-cell-disabled")
+            return
+        month_option.click()
+
+        if end_date_dt <= contract_end_dt and end_date_dt > today:
+            self.logger.info(f"End date {end_date} is within the contract period and after today. Expect enabled option.")
+            expect(self.elem("date_picker_cell", date=end_date)).not_to_contain_class("ant-picker-cell-disabled")
+        else:
+            self.logger.info(f"End date {end_date} is outside the contract period or before today. Expect disabled option.")
+            expect(self.elem("date_picker_cell", date=end_date)).to_contain_class("ant-picker-cell-disabled")
