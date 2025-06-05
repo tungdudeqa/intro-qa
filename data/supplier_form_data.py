@@ -1,10 +1,4 @@
-form_data = [
-    {
-        "supplier_name": "TEST SUPPLIER",
-        "business_type": "ABC",
-        "end_date": "2025-12-01",
-        "retention_days": "1",
-    },
+invalid_form_data = [
     {
         "supplier_name": "",
         "business_type": "DEF",
@@ -22,5 +16,26 @@ form_data = [
         "business_type": "JKL",
         "end_date": "2025-12-21",
         "retention_days": "",
+    },
+]
+
+valid_form_data = [
+    {
+        "supplier_name": "TEST SUPPLIER 1",
+        "business_type": "ABC",
+        "end_date": "2026-12-01",
+        "retention_days": "1",
+    },
+    {
+        "supplier_name": "TEST SUPPLIER 2",
+        "business_type": "ABC",
+        "end_date": "2026-02-01",
+        "retention_days": "1",
+    },
+    {
+        "supplier_name": "TEST SUPPLIER 3",
+        "business_type": "ABC",
+        "end_date": "2025-09-07",
+        "retention_days": "1",
     },
 ]

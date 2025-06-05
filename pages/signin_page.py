@@ -19,6 +19,8 @@ class SigninPage(BasePage):
             "password_input": '//*[@data-testid="password-input"]',
             "show_password_checkbox": '//*[@data-testid="password-input-checkbox"]',
             "signin_button": '//*[@data-testid="login-btn"]',
+            "otp_input": '//*[@data-testid="otp-input"]',
+            "verify_button": '//button[@data-testid="submit-btn"]',
             "forgot_password_button": '//*[@data-testid="request-forgot-btn"]',
             "contact_us_link": "//body/div/div/div[2]/div/div/div[2]",
             "contact_email_unsupported": "//body/div/div/div/a",
@@ -27,7 +29,6 @@ class SigninPage(BasePage):
             "loading": 'text=Please wait.',
             "spinner": '//*[contains(@class, "animate-spin-fast")]',
         }
-        self.elem = lambda x: self.page.locator(self.locators[x])
 
     def check_elements_presence(self, url="/"):
         self.page.goto(self.BASE_URL + url)
@@ -86,6 +87,16 @@ class SigninPage(BasePage):
         expect(self.elem("password_input")).to_have_attribute("type", "password")
 
         self.elem("signin_button").click()
+
+        try:
+            otp_input = self.elem("otp_input")
+            otp_input.wait_for(timeout=5000)
+            otp_input.fill(self.BASE_OTP)
+            self.elem("verify_button").click()
+            self.logger.info("OTP code entered successfully.")
+        except:
+            self.logger.info("No OTP input found, proceeding without entering OTP.")
+
         expect(self.page).to_have_url(
             self.BASE_URL + "/en/platform/reports", timeout=10000
         )
