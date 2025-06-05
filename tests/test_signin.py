@@ -70,7 +70,12 @@ def test_dcp_013(page: Page):
     signin_page = SigninPage(page)
     signin_page.check_loading_page()
 
-@pytest.mark.skip(reason="done in test_dcp_018")
+@pytest.mark.skip(reason="subtitle does not match")
 def test_dcp_018(page: Page):
     signin_page = SigninPage(page)
     signin_page.check_device_not_supported()
+
+@pytest.mark.skip(reason=".")
+def test_limit(page: Page):
+    signin_page = SigninPage(page)
+    signin_page.spam_signin()

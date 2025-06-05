@@ -138,13 +138,26 @@ class SigninPage(BasePage):
         expect(self.elem("logo_unsupported")).to_be_visible()
         expect(self.elem("title")).to_have_text("Device not supported")
         expect(self.elem("subtitle")).to_have_text(
-            "This device does not meet our requirements. For a better experience, please try again on a different device or contact support for assistance."
+            "This device does not meet our requirements, for your good experience please try again on other device or contact support for help."
         )
         expect(self.elem("contact_email_unsupported")).to_be_visible()
-        time.sleep(1)
 
     def check_mail_link_open(self):
         self.page.goto(self.BASE_URL + "/")
         mail_link = self.elem("contact_us_link").locator("a").first
         display_mail = mail_link.text_content()
         expect(mail_link).to_have_attribute("href", f"mailto:{display_mail}")
+    
+    def spam_signin(self, email="", password="", count=10000):
+        self._pre_signin(email, password)
+        for _ in range(count):
+            self.elem("signin_button").click()
+            email += "a"
+            password += "a"
+            self.elem("email_input").fill(email)
+            self.elem("password_input").fill(password)
+    
+    def click_mail_link(self):
+        self.page.goto(self.BASE_URL + "/")
+        mail_link = self.elem("contact_us_link").locator("a").first
+        mail_link.click()
