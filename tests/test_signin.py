@@ -55,6 +55,13 @@ def test_dcp_010(page: Page):
     signin_page = SigninPage(page)
     signin_page.signin_refresh()
 
+@pytest.mark.skip(reason="done in test_dcp_012")
+def test_dcp_012(page: Page):
+    signin_page = SigninPage(page)
+    signin_page.goto("/index")
+    signin_page.check_elements_presence()
+
+@pytest.mark.skip(reason="done in test_dcp_013")
 def test_dcp_013(page: Page):
     signin_page = SigninPage(page)
     signin_page.check_loading_page()
