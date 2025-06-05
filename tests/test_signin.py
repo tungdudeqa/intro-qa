@@ -55,6 +55,11 @@ def test_dcp_010(page: Page):
     signin_page = SigninPage(page)
     signin_page.signin_refresh()
 
+@pytest.mark.skip(reason="done in test_dcp_011")
+def test_dcp_011(page: Page):
+    signin_page = SigninPage(page)
+    signin_page.check_mail_link_open()
+
 @pytest.mark.skip(reason="done in test_dcp_012")
 def test_dcp_012(page: Page):
     signin_page = SigninPage(page)

@@ -142,3 +142,9 @@ class SigninPage(BasePage):
         )
         expect(self.elem("contact_email_unsupported")).to_be_visible()
         time.sleep(1)
+
+    def check_mail_link_open(self):
+        self.page.goto(self.BASE_URL + "/")
+        mail_link = self.elem("contact_us_link").locator("a").first
+        display_mail = mail_link.text_content()
+        expect(mail_link).to_have_attribute("href", f"mailto:{display_mail}")
