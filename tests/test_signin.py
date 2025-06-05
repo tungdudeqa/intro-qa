@@ -60,11 +60,10 @@ def test_dcp_011(page: Page):
     signin_page = SigninPage(page)
     signin_page.check_mail_link_open()
 
-@pytest.mark.skip(reason="done in test_dcp_012")
+@pytest.mark.skip(reason="/index does not exist")
 def test_dcp_012(page: Page):
     signin_page = SigninPage(page)
-    signin_page.goto("/index")
-    signin_page.check_elements_presence()
+    signin_page.check_elements_presence("/index")
 
 @pytest.mark.skip(reason="done in test_dcp_013")
 def test_dcp_013(page: Page):

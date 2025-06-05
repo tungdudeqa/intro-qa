@@ -29,8 +29,8 @@ class SigninPage(BasePage):
         }
         self.elem = lambda x: self.page.locator(self.locators[x])
 
-    def check_elements_presence(self):
-        self.page.goto(self.BASE_URL + "/")
+    def check_elements_presence(self, url="/"):
+        self.page.goto(self.BASE_URL + url)
 
         try:
             expect(self.elem("title")).to_have_text("Welcome")
