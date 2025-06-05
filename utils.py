@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import calendar
 
 
 def retention_date_format(end_date, retention_days):
@@ -7,3 +8,7 @@ def retention_date_format(end_date, retention_days):
     result_date = base_date + timedelta(days=7 + retention_days)
     formatted = f"{retention_days} Days ({result_date.strftime('%d %b %Y')})"
     return formatted
+
+
+def month_abbr_to_num(month_abbr):
+    return list(calendar.month_abbr).index(month_abbr.capitalize())
