@@ -27,7 +27,7 @@ def enter_site(page: Page):
 
     try:
         otp_input = page.locator(locators["otp_input"])
-        otp_input.wait_for(timeout=3000)
+        otp_input.wait_for(timeout=5000)
         otp_input.fill(otp_code)
         page.locator(locators["verify_button"]).click()
         logger.info("OTP code entered successfully.")
