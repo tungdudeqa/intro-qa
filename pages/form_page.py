@@ -90,6 +90,13 @@ class FormPage(SigninPage):
         start_date_display = self.elem("start_date_display")
         retention_date_display = self.elem("retention_date_display")
 
+        self.logger.info("Checking saved values:")
+        self.logger.info(f"Expected supplier Name: {supplier_name}")
+        self.logger.info(f"Expected business Type: {business_type}")
+        self.logger.info(f"Expected retention Days: {retention_days}")
+        self.logger.info(f"Expected start Date: {start_date_value + " - " + end_date_value}")
+        self.logger.info(f"Expected retention Date: {retention_date_format(end_date, retention_days)}")
+
         expect(supplier_name_display).to_have_text(supplier_name)
         expect(business_type_display).to_have_text(business_type)
         expect(start_date_display).to_have_text(

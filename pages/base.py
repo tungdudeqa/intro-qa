@@ -3,6 +3,7 @@ import dotenv
 import logging
 
 dotenv.load_dotenv()
+
 logger = logging.getLogger("logger")
 
 class BasePage:

@@ -63,10 +63,12 @@ class AdminPage(SigninPage):
         self.elem(field + "_field").fill(data)
 
         if data != "":
+            self.logger.info(f"{field} field filled with invalid data")
             expect(self.page.locator(self.errors[field]['path'])).to_have_text(
                 self.errors[field]["message"]["invalid"]
             )
         else:
+            self.logger.info(f"{field} field filled with empty data")
             expect(self.page.locator(self.errors[field]['path'])).to_have_text(
                 self.errors[field]["message"]["empty"]
             )

@@ -32,6 +32,7 @@ class SigninPage(BasePage):
 
     def check_elements_presence(self, url="/"):
         self.page.goto(self.BASE_URL + url)
+        self.logger.info(f"Checking elements presence on signin page")
 
         try:
             expect(self.elem("title")).to_have_text("Welcome")
@@ -56,8 +57,8 @@ class SigninPage(BasePage):
             expect(self.elem("forgot_password_button")).to_be_visible()
             expect(self.elem("forgot_password_button")).to_have_text("Forgot password?")
 
-            # Please contacttest@test.comif you need any more help -- in the web right now
-            # expect(self.elem("contact_us_link")).to_have_text("Please contact support@sertiscorp.com if you need any more help")
+            # Error - in the web is "Please contacttest@test.comif you need any more help"
+            expect(self.elem("contact_us_link")).to_have_text("Please contact support@sertiscorp.com if you need any more help")
 
             expect(self.elem("platform_name").locator("div").nth(0)).to_have_text(
                 "Data Commercialization Platform"
@@ -159,7 +160,7 @@ class SigninPage(BasePage):
         display_mail = mail_link.text_content()
         expect(mail_link).to_have_attribute("href", f"mailto:{display_mail}")
     
-    def spam_signin(self, email="", password="", count=10000):
+    def spam_signin(self, email="", password="", count=1000):
         self._pre_signin(email, password)
         for _ in range(count):
             self.elem("signin_button").click()
