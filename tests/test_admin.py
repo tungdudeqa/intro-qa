@@ -22,7 +22,8 @@ test_data_error_field = [
     } for value in phone_data],
 ]
 
-@pytest.mark.parametrize("obj", test_data_error_field, ids=[f"{f}:{v}" for f, v in test_data_error_field])
+# some phone numbers are not valid, but the web does not show error message because of the validator lib used to dev
+@pytest.mark.parametrize("obj", test_data_error_field, ids=[f"{f}-{v}" for f, v in test_data_error_field])
 def test_input_field_error_messages(page: Page, obj):
     admin_page = AdminPage(page)
     admin_page.check_error_message(obj["field"], obj["value"])

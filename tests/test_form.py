@@ -8,7 +8,7 @@ from pages.form_page import FormPage
 
 load_dotenv()
 
-@pytest.mark.skip(reason="Skipping test for now.")
+# @pytest.mark.skip(reason="Skipping test for now.")
 @pytest.mark.parametrize("data", valid_form_data)
 def test_valid_supplier_form(page: Page, data):
     form_page = FormPage(page)
@@ -19,7 +19,7 @@ def test_valid_supplier_form(page: Page, data):
         end_date=data["end_date"],
     )
 
-@pytest.mark.skip(reason="Skipping test for now.")
+# @pytest.mark.skip(reason="Skipping test for now.")
 @pytest.mark.parametrize("data", invalid_form_data)
 def test_invalid_supplier_form(page: Page, data):
     form_page = FormPage(page)
@@ -29,7 +29,7 @@ def test_invalid_supplier_form(page: Page, data):
         retention_days=data["retention_days"],
     )
 
-@pytest.mark.skip(reason="Skipping test for now.")
+# @pytest.mark.skip(reason="Skipping test for now.")
 @pytest.mark.parametrize("date", date_data)
 def test_validate_date(page: Page, date):
     form_page = FormPage(page)
